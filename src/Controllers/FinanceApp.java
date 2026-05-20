@@ -21,7 +21,7 @@ public class FinanceApp {
 
     public String saveUserData(User user, String path) {
         File directory = new File(path);
-        if (!directory.exists()) {'k'
+        if (!directory.exists()) {
             directory.mkdirs();
         }
 
