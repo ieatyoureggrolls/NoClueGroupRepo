@@ -25,7 +25,7 @@ public class Password {
      */
     private String createPassword(String password){
         password = password.trim();
-        char[] passwordChars = password.toCharArray();//Converts String to Char array as Chars not lingering in memory as Strings do
+        char[] passwordChars = password.toCharArray();//Converts String to Char array as Chars don't linger in memory as Strings do
         return createHash(passwordChars);
     }
 
