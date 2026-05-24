@@ -21,7 +21,7 @@ public class User {
 
     //Empty constructor. Needed for Jackson
     public User(){
-    
+    setHistory(new PurchaseHistory());
     }
     public User(String username, String email, String password, PurchaseHistory history) {
         setUsername(username);
@@ -63,6 +63,10 @@ public class User {
         this.history = history;
     }
     //endregion
+
+    public void addDataPoint(EntryData data){
+        getHistory().history.add(data);
+    }
 
     //region Override Methods
     @Override

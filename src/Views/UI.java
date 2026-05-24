@@ -1,8 +1,35 @@
 package Views;
 
+import Models.EntryData;
 import Models.User;
 
+import java.time.LocalDate;
+
 public class UI {
+    //region menu options
+    public static int getMenuOption(boolean signedIn){
+        String message = "What would you like to do?";
+        if (!signedIn){
+            message += """
+                    
+                    1. Sign In
+                    2. Sign Up
+                    3. Exit
+                    """;
+        }
+        else{
+
+            message += """
+                    
+                    1. Add new financial data
+                    2. View financial history
+                    3. Sign out
+                    """;
+        }
+        return Console.getIntInput(message, 1, 3);
+    }
+    //endregion
+
     //region inputs
     /**
      * Prompts the user to input their username and returns what they entered.
@@ -28,30 +55,35 @@ public class UI {
         return Console.getStringInput("Please enter your email:", false);
     }
 
-    private static String getTransactionAmount(){
+    public static double getTransactionAmount(){
         double amount = Console.getDoubleInput("How much was this transaction?");
-        String dollarAmount = "$" + (Math.round(amount * 100) / 100);
-        return dollarAmount;
+        return  ((double) Math.round(amount * 100) / 100);
     }
 
-    public static String getTransactionDate(){
-        String date = Console.getStringInput("Please enter your transaction date:", false);
-        //ToDo validate the date to make sure that it is valid
+    /**
+     * Prompts the user to input a date
+     * @return A String of a valid date
+     */
+    public static LocalDate getTransactionDate(){
+        LocalDate date = Console.getDateInput("Please enter your transaction date:", Console.TextColor.DEFAULT);
         return date;
     }
 
-    public static String addDataPoint(){
-        //ToDo make this return an EntryData instead of just a string
-        boolean isExpense = Console.getBooleanInput("Is this an income or an expense?(Y/N)", "Y", "N");
-        String amount = getTransactionAmount();
-        String date = getTransactionDate();
+    /**
+     * Prompts the user to input a few values to make a new financial data point
+     * @return EntryData, but if it is an expense it will also store where it was made at
+     */
+    public static EntryData addDataPoint(){
+        boolean isExpense = Console.getBooleanInput("Is this an expense or income?", "E", "I");
+        double amount = getTransactionAmount();
+        LocalDate date = getTransactionDate();
         String madeAt;
         if (isExpense) {
             madeAt = Console.getStringInput("Where was this transaction made?", false);
-            return String.format("An expense was made on %s to %s for %s",  date, madeAt, amount);
+            return new EntryData(amount, date, isExpense, madeAt);
         }
 
-        return String.format("Income was reported on %s for %s",  date, amount);
+        return new EntryData(amount, date, isExpense);
     }
     //endregion
 
@@ -68,12 +100,35 @@ public class UI {
                 """,  user.getUsername(), user.getPassword(), user.getEmail()));
     }
 
-    public static void printBills(User user){
-
+    /**
+     * Prints out only expenses made on the users account
+     * @param user who is the active user
+     */
+    public static void printExpenses(User user){
+        for (EntryData data : user.getHistory().history) {
+            if (data.isExpense())
+                Console.writeln(data.toString());
+        }
     }
 
+    /**
+     * Prints out only income made on the users account
+     * @param user who is the active user
+     */
     public static void printIncome(User user){
+        for (EntryData data : user.getHistory().history) {
+            if (!data.isExpense())
+                Console.writeln(data.toString());
+        }
+    }
 
+    /**
+     * Prints all financial history on the users account
+     * @param user who is the active user
+     */
+    public static void printHistory(User user){
+        for (EntryData data : user.getHistory().history)
+            Console.writeln(data.toString());
     }
     //endregion
 }
