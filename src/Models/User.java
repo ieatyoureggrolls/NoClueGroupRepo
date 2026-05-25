@@ -17,6 +17,8 @@ public class User {
     private String email;
     @JsonProperty("password")
     private String password;
+    @JsonProperty("PasswordHash")
+    private char[] passwordHash;
     @JsonProperty("history")
     private PurchaseHistory history;
     @JsonProperty("goals")
@@ -26,10 +28,12 @@ public class User {
     public User(){
     setHistory(new PurchaseHistory());
     }
+
     public User(String username, String email, String password, PurchaseHistory history) {
+        String passwordHash = Password.createHash(password.toCharArray());
         setUsername(username);
         setEmail(email);
-        setPassword(password);
+        setPassword(passwordHash);
         setHistory(history);
     }
 
@@ -52,6 +56,14 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public char[] getPasswordHash() {
+        return passwordHash;
+    }
+
+    private void setPasswordHash(char[] passwordHash) {
+        this.passwordHash = passwordHash;
     }
 
     public ArrayList<Goal> getGoals(){
