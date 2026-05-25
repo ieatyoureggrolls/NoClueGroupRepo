@@ -1,6 +1,6 @@
 package Controllers;
 
-import Models.User;
+import Models.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,10 +10,12 @@ import Views.UI;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.databind.*;
+import java.time.LocalDate;
+import javax.crypto.AEADBadTagException;
 
 public class FinanceApp {
     public final String SAVE_PATH = "src/Data/Users/";
-    private User aciveUser = null;
+    private User activeUser = null;
 
     public void run() {
         User dummyUser = new User("john_duhumjoe", "jdoe@gmail.com", "passwordddd34", null);
@@ -44,7 +46,7 @@ public class FinanceApp {
 
     public void mainMenu() {
         do {
-            int choice = UI.getMenuOption(aciveUser != null) + (aciveUser != null ? 3 : 0);
+            int choice = UI.getMenuOption(activeUser != null) + (activeUser != null ? 3 : 0);
             switch (choice) { //1-3 not signed in, 4-6 signed in
                 case 1: //Sign in
                     signIn();
@@ -60,7 +62,13 @@ public class FinanceApp {
                 case 5: //View financial history
                     viewHistory();
                     break;
-                case 6: //Sign Out
+                case 6:
+                    addGoal();
+                    break;
+                case 7:
+                    viewGoals();
+                    break;
+                case 8: //Sign Out
                     signOut();
                     break;
             }
@@ -68,24 +76,39 @@ public class FinanceApp {
     }
 
     private boolean signIn() {
-        aciveUser = new User(); //here for testing purposes
+        activeUser = new User(); //here for testing purposes
         return false;
     }
 
     private boolean signUp() {
-        aciveUser = new User(); //here for testing purposes
+        activeUser = new User(); //here for testing purposes
         return false;
     }
 
     private void signOut() {
-        aciveUser = null;
+        activeUser = null;
     }
 
     private void addData() {
-        aciveUser.addDataPoint(UI.addDataPoint());
+        activeUser.addDataPoint(UI.addDataPoint());
     }
 
     private void viewHistory() {
-        UI.printHistory(aciveUser);
+        UI.printHistory(activeUser);
+    }
+
+    private void addGoal(){
+        if (activeUser != null){
+            String desc = UI.getGoalDescription();
+            double targetAmount = UI.getGoalTargetAmount();
+            LocalDate deadline = UI.getGoalDeadline();
+            activeUser.addGoal(new Goal(desc, targetAmount, deadline));
+        }
+    }
+
+    private void viewGoals(){
+        if (activeUser != null){
+            UI.printGoals(activeUser);
+        }
     }
 }
