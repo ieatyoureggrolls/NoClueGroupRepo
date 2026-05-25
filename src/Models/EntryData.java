@@ -55,8 +55,6 @@ public class EntryData {
     }
 
     private void setMadeAt(String madeAt) {
-        if (madeAt == null || madeAt.isEmpty())
-            throw new IllegalArgumentException("MadeAt cannot be null or empty");
         this.madeAt = madeAt;
     }
     //endregion

@@ -23,7 +23,7 @@ public class Password {
      * @param password The plaintext password to hash.
      * @return A string containing the iteration count, salt, and hash, encoded in Base64, separated by colons.
      */
-    private String createPassword(String password){
+    static private String createPassword(String password){
         password = password.trim();
         char[] passwordChars = password.toCharArray();//Converts String to Char array as Chars don't linger in memory as Strings do
         return createHash(passwordChars);

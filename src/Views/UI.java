@@ -1,6 +1,7 @@
 package Views;
 
 import Models.EntryData;
+import Models.Goal;
 import Models.User;
 import java.time.LocalDate;
 import java.util.List;
@@ -23,10 +24,12 @@ public class UI {
                     
                     1. Add new financial data
                     2. View financial history
-                    3. Sign out
+                    3. Add a financial goal
+                    4. View financial goals
+                    5. Sign out
                     """;
         }
-        return Console.getIntInput(message, 1, 3);
+        return Console.getIntInput(message, 1, 5);
     }
     //endregion
 
@@ -69,6 +72,18 @@ public class UI {
         return date;
     }
 
+    public static String getGoalDescription(){
+        return Console.getStringInput("Please enter a description for your goal:");
+    }
+
+    public static double getGoalTargetAmount(){
+        return Console.getDoubleInput("Please enter a target amount for your goal:");
+    }
+
+    public static LocalDate getGoalDeadline(){
+        return Console.getDateInput("Please enter a date for your goal:", Console.TextColor.DEFAULT);
+    }
+
     /**
      * Prompts the user to input a few values to make a new financial data point
      * @return EntryData, but if it is an expense it will also store where it was made at
@@ -109,6 +124,21 @@ public class UI {
             if (data.isExpense())
                 Console.writeln(data.toString());
         }
+    }
+
+    public static void printGoals(User user) {
+        Console.writeln("\n=== Financial Goals ===");
+        
+        if (user.getGoals() == null || user.getGoals().isEmpty()) {
+            Console.writeln("No financial goals set yet.");
+            Console.writeln("=======================\n");
+            return;
+        }
+
+        for (Goal goal : user.getGoals()) {
+            Console.writeln(goal.toString());
+        }
+        Console.writeln("=======================\n");
     }
 
     /**
