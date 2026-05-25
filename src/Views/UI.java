@@ -2,8 +2,8 @@ package Views;
 
 import Models.EntryData;
 import Models.User;
-
 import java.time.LocalDate;
+import java.util.List;
 
 public class UI {
     //region menu options
@@ -126,9 +126,39 @@ public class UI {
      * Prints all financial history on the users account
      * @param user who is the active user
      */
-    public static void printHistory(User user){
-        for (EntryData data : user.getHistory().history)
-            Console.writeln(data.toString());
+    public static void printHistory(User user) {
+        System.out.println("\n=== Transaction Ledger ===");
+        
+        // Check if history is empty
+        if (user.getHistory().history.isEmpty()) {
+            System.out.println("No transactions found.");
+            System.out.println("==========================\n");
+            return;
+        }
+
+        List<EntryData> sortedTransactions = user.getHistory().getSortedHistory();
+
+        // ANSI Color Codes
+        final String ANSI_RESET = "\u001B[0m";
+        final String ANSI_GREEN = "\u001B[32m";
+        final String ANSI_RED = "\u001B[31m";
+
+        for (EntryData entry : sortedTransactions) {
+            // Determine color and sign based on whether it's an expense
+            String color = entry.isExpense() ? ANSI_RED : ANSI_GREEN;
+            String sign = entry.isExpense() ? "-" : "+";
+            String location = entry.isExpense() ? " (at " + entry.getMadeAt() + ")" : "";
+
+            // Print the formatted line
+            System.out.printf("%s[%s] %s$%.2f%s%s\n", 
+                color, 
+                entry.getDate(), 
+                sign, 
+                entry.getAmount(), 
+                location, 
+                ANSI_RESET
+            );
+        }
+        System.out.println("==========================\n");
     }
-    //endregion
 }
