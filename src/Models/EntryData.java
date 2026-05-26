@@ -6,18 +6,20 @@ public class EntryData {
     private double amount;
     private LocalDate date;
     private String madeAt;
+    private String category;
     private boolean isExpense;
 
     public EntryData() {}
 
-    public EntryData(double amount, LocalDate date, boolean isExpense) {
+    public EntryData(double amount, LocalDate date, boolean isExpense, String category) {
         setAmount(amount);
         setDate(date);
         setExpense(isExpense);
+        setCategory(category);
     }
 
-    public EntryData(double amount, LocalDate date, boolean isExpense, String madeAt) {
-        this(amount, date, isExpense);
+    public EntryData(double amount, LocalDate date, boolean isExpense, String category, String madeAt) {
+        this(amount, date, isExpense, category);
         setMadeAt(madeAt);
     }
 
@@ -50,6 +52,16 @@ public class EntryData {
         isExpense = expense;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    private void setCategory(String category) {
+        if (category == null || category.isEmpty())
+            throw new IllegalArgumentException("Category cannot be null or empty");
+        this.category = category;
+    }
+
     public String getMadeAt() {
         return madeAt;
     }
@@ -63,7 +75,9 @@ public class EntryData {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("$");
+        sb.append("Category: ");
+        sb.append(category);
+        sb.append(" | $");
         sb.append(getAmount());
         sb.append(" was reported as ");
         sb.append(isExpense() ? "an expense" : "income");

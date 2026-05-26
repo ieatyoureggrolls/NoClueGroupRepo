@@ -108,7 +108,8 @@ public class FinanceApp {
                 }
             }
         }
-        activeUser = new User(); //here for testing purposes
+//        activeUser = new User(); //here for testing purposes
+
         return false;
     }
 

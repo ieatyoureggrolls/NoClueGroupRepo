@@ -29,7 +29,7 @@ public class UI {
                     5. Sign out
                     """;
         }
-        return Console.getIntInput(message, 1, 5);
+        return Console.getIntInput(message, 1, (!signedIn ? 3 : 5));
     }
     //endregion
 
@@ -72,6 +72,10 @@ public class UI {
         return date;
     }
 
+    public static String getCategory(){
+        return Console.getStringInput("What was the category of this expense?", false);
+    }
+
     public static String getGoalDescription(){
         return Console.getStringInput("Please enter a description for your goal:");
     }
@@ -92,13 +96,14 @@ public class UI {
         boolean isExpense = Console.getBooleanInput("Is this an expense or income?", "E", "I");
         double amount = getTransactionAmount();
         LocalDate date = getTransactionDate();
+        String category = getCategory();
         String madeAt;
         if (isExpense) {
             madeAt = Console.getStringInput("Where was this transaction made?", false);
-            return new EntryData(amount, date, isExpense, madeAt);
+            return new EntryData(amount, date, isExpense, category, madeAt);
         }
 
-        return new EntryData(amount, date, isExpense);
+        return new EntryData(amount, date, isExpense, category);
     }
     //endregion
 
@@ -157,12 +162,12 @@ public class UI {
      * @param user who is the active user
      */
     public static void printHistory(User user) {
-        System.out.println("\n=== Transaction Ledger ===");
+        Console.writeln("\n=== Transaction Ledger ===");
         
         // Check if history is empty
         if (user.getHistory().history.isEmpty()) {
-            System.out.println("No transactions found.");
-            System.out.println("==========================\n");
+            Console.writeln("No transactions found.");
+            Console.writeln("==========================\n");
             return;
         }
 
@@ -180,15 +185,16 @@ public class UI {
             String location = entry.isExpense() ? " (at " + entry.getMadeAt() + ")" : "";
 
             // Print the formatted line
-            System.out.printf("%s[%s] %s$%.2f%s%s\n", 
+            Console.writeln(String.format("%s[%s] %s$%.2f%s%s | %s\n",
                 color, 
                 entry.getDate(), 
                 sign, 
                 entry.getAmount(), 
                 location, 
-                ANSI_RESET
-            );
+                ANSI_RESET,
+                entry.getCategory()
+            ));
         }
-        System.out.println("==========================\n");
+        Console.writeln("==========================\n");
     }
 }
