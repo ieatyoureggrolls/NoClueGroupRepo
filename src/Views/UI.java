@@ -105,6 +105,18 @@ public class UI {
 
         return new EntryData(amount, date, isExpense, category);
     }
+
+    public static int chooseSort(){
+        return Console.getIntInput("""
+                How would you like to sort your transaction history?
+                1. Sort by date
+                2. Sort by reversed date
+                3. sort by category (alphabetically)
+                4. sort by reversed category (alphabetically)
+                5. sort by amount (largest first)
+                6. sort by amount (smallest first)
+                """);
+    }
     //endregion
 
     //region print functions
@@ -162,6 +174,7 @@ public class UI {
      * @param user who is the active user
      */
     public static void printHistory(User user) {
+        List<EntryData> sortedTransactions = user.getHistory().getSortedHistory(chooseSort());
         Console.writeln("\n=== Transaction Ledger ===");
         
         // Check if history is empty
@@ -171,7 +184,7 @@ public class UI {
             return;
         }
 
-        List<EntryData> sortedTransactions = user.getHistory().getSortedHistory();
+
 
         // ANSI Color Codes
         final String ANSI_RESET = "\u001B[0m";
