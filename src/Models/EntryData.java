@@ -9,6 +9,7 @@ public class EntryData {
     private String category;
     private boolean isExpense;
 
+
     public EntryData() {}
 
     public EntryData(double amount, LocalDate date, boolean isExpense, String category) {

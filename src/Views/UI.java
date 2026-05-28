@@ -27,9 +27,10 @@ public class UI {
                     3. Add a financial goal
                     4. View financial goals
                     5. Sign out
+                    6. Interest Account Estimate
                     """;
         }
-        return Console.getIntInput(message, 1, (!signedIn ? 3 : 5));
+        return Console.getIntInput(message, 1, (!signedIn ? 3 : 6));
     }
     //endregion
 
@@ -210,4 +211,24 @@ public class UI {
         }
         Console.writeln("==========================\n");
     }
+
+    public static double getBalance(){
+        return Console.getDoubleInput("enter current balance: ", Console.TextColor.DEFAULT);
+    }
+
+    public static Double getInterest(){
+        return Console.getDoubleInput("Enter the Interest percentage (%): ", Console.TextColor.DEFAULT);
+    }
+
+    public static void interestAccount(double futureValue, int years ){
+        Console.writeln(String.format("The account's future value in %d years is: $%.2f",years,futureValue),
+                Console.TextColor.GREEN
+        );
+
+    }
+
+    public static void accountDetails(double balance, double apy){
+        Console.writeln("====================================================\nWith a balance of $" + balance+" dollars and an interest rate of " + apy +"%");
+    }
+
 }

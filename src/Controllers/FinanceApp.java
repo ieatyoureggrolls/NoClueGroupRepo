@@ -75,6 +75,9 @@ public class FinanceApp {
                 case 8: //Sign Out
                     signOut();
                     break;
+                case 9: // InterestEstimate
+                    interestEstimate();
+                    break;
             }
         } while (true);
     }
@@ -152,5 +155,27 @@ public class FinanceApp {
         if (activeUser != null){
             UI.printGoals(activeUser);
         }
+    }
+
+    private void interestEstimate() {
+
+        double balance = UI.getBalance();
+        double apy = UI.getInterest();
+        InterestEstimate estimate = new InterestEstimate();
+
+        UI.accountDetails(balance, apy);
+
+        double oneYear = estimate.calculateFutureValue(balance, apy, 1);
+        UI.interestAccount(oneYear, 1);
+
+
+        double fiveYears = estimate.calculateFutureValue(balance, apy, 5);
+        UI.interestAccount(fiveYears, 5);
+
+        double tenYears = estimate.calculateFutureValue(balance, apy, 10);
+        UI.interestAccount(tenYears, 10);
+
+        System.out.println("===============================================\n");
+
     }
 }
